@@ -1,6 +1,28 @@
 <?php // CUSTOM NAVIGATION
 
 
+/*
+ * This can help fix an issue where the blog page is highlighted
+ * for archives/singles of other post types.
+ */
+add_filter('nav_menu_css_class', 'custom_post_type_nav_class', 10, 2);
+function custom_post_type_nav_class($classes, $item){
+    $post_type = get_post_type();
+
+    if(!is_singular('post') && !is_category() && !is_tag() && $item->object_id == get_option('page_for_posts')){
+        unset($classes[array_search('current_page_parent', $classjes)]);
+    }
+
+    if(!is_search() && !is_404()){
+        if(in_array("post-type-{$post_type}", $classes)){
+            array_push($classes, 'current_page_parent');
+        }
+    }
+
+    return $classes;
+} //EF
+
+
 class customize_wp_nav_menu {
 
     function __construct(){
